@@ -86,11 +86,11 @@ def main():
     status = CephClusterStatus(args.url)
 
     if status['osdmap']['osdmap']['num_osds'] != status['osdmap']['osdmap']['num_up_osds']:
-        print "%s|%s" % ("WARN ceph health is okay, but not all osd drives are up ", status.get_perf_data())
+        print("WARN ceph health is %s but not all osd drives are up and in %s " % (status.get_nagios_string(), status.get_perf_data()))
         sys.exit(1)
     else:
-           print "%s|%s" % (status.get_nagios_string(), status.get_perf_data())
-           sys.exit(status.get_exit_code())
+        print "%s|%s" % (status.get_nagios_string(), status.get_perf_data())
+        sys.exit(status.get_exit_code())
 
 if __name__ == '__main__':
     main()
