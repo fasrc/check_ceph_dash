@@ -84,8 +84,13 @@ def main():
     args = parser.parse_args()
 
     status = CephClusterStatus(args.url)
-    print "%s|%s" % (status.get_nagios_string(), status.get_perf_data())
-    sys.exit(status.get_exit_code())
+
+    if status['osdmap']['osdmap']['num_osds'] != status['osdmap']['osdmap']['num_up_osds']:
+        print "%s|%s" % ("WARN ceph health is okay, but not all osd drives are up ", status.get_perf_data())
+        sys.exit(1)
+    else:
+           print "%s|%s" % (status.get_nagios_string(), status.get_perf_data())
+           sys.exit(status.get_exit_code())
 
 if __name__ == '__main__':
     main()
